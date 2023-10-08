@@ -152,9 +152,15 @@ class HttpRequest {
         document.body.removeChild(link); // 下载完成移除元素
         window.URL.revokeObjectURL(url); // 释放掉blob对象
       }
+      console.log(response, '????');
       // 单独处理文件下载结束
       if (response?.data) {
+        // TODO 特殊处理图形验证码
+        if (response.headers['content-type'].startsWith('image/svg+xml')) {
+          return Promise.resolve(response.data);
+        }
         const { code, message, result } = response.data;
+        console.log(code, message, result, '----->>>');
         if (Object.is(code, 0)) {
           // ElMessage.success(message);
           return Promise.resolve({ code, message, result });
