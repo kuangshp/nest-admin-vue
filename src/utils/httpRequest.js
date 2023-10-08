@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { ElMessage, ElNotification } from 'element-plus';
-import { AUTH_TOKEN_NAME, LOGOUT_CODE } from '@/constant';
+import {
+  AUTH_TOKEN_NAME,
+  AUTH_REFRESH_TOKEN_NAME,
+  LOGOUT_CODE,
+  REFRESH_LOGOUT_CODE,
+} from '@/constant';
 import { fullLoading } from './fullLoading';
 import { useAppStore } from '@/stores/app';
 
@@ -77,7 +82,7 @@ axiosInstance.interceptors.request.use(function (config) {
 
 // 响应的时候拦截器
 axiosInstance.interceptors.response.use(
-  (response) => {
+  async (response) => {
     const status = response.status;
     clearLoading(); // 隐藏加载中
     const { url, method, data } = response.config;
@@ -91,7 +96,36 @@ axiosInstance.interceptors.response.use(
         if (Object.is(code, 0)) {
           return Promise.resolve({ code, message, result });
         } else {
+          console.log(response.status, '??11');
           if (code === LOGOUT_CODE) {
+            const config = response.config;
+            if (refreshing) {
+              return new Promise((resolve) => {
+                queue.push({
+                  config,
+                  resolve,
+                });
+              });
+            }
+            if (!config.url.includes('/refresh')) {
+              // 刷新token
+              refreshing = true;
+              const res = await refreshToken();
+              refreshing = false;
+              console.log(res, '刷新结构');
+              if (res.status === 200) {
+                queue.forEach(({ config, resolve }) => {
+                  resolve(axiosInstance(config));
+                });
+                return axiosInstance(config);
+              } else {
+                ElMessage.warning('登录过期，请重新登录');
+                const appStore = useAppStore();
+                // 退出登录
+                appStore.logout();
+              }
+            }
+          } else if (code == REFRESH_LOGOUT_CODE) {
             const appStore = useAppStore();
             // 退出登录
             appStore.logout();
@@ -123,45 +157,22 @@ axiosInstance.interceptors.response.use(
   },
   async (error) => {
     clearLoading(); // 隐藏加载中
-    const { data, config } = error.response;
-    console.log(data, config, '请求错误');
-    if (refreshing) {
-      return new Promise((resolve) => {
-        queue.push({
-          config,
-          resolve,
-        });
-      });
-    }
-    if (data.statusCode === 401 && !config.url.includes('/refresh')) {
-      // 刷新token
-      refreshing = true;
-      const res = await refreshToken();
-      refreshing = false;
-      console.log(res, '刷新结构');
-      if (res.status === 200) {
-        queue.forEach(({ config, resolve }) => {
-          resolve(axiosInstance(config));
-        });
-        return axiosInstance(config);
-      } else {
-        alert(data || '登录过期，请重新登录');
-      }
-    } else {
-      return error.response;
-    }
+
+    return error.response;
   }
 );
 
 // 刷新token
 const refreshToken = async () => {
-  const res = await axiosInstance.get('/refresh', {
+  const appStore = useAppStore();
+  const { result } = await axiosInstance.get('/admin/refresh', {
     params: {
-      token: localStorage.getItem('refresh_token'),
+      token: appStore.globalRefreshToken,
     },
   });
-  console.log(res, '刷新token请求');
-  localStorage.setItem('access_token', res.data.accessToken);
-  localStorage.setItem('refresh_token', res.data.refreshToken);
+  console.log(result, '刷新token请求');
+  appStore.setGlobalToken(result[AUTH_TOKEN_NAME]);
+  appStore.setGlobalRefreshToken(result[AUTH_REFRESH_TOKEN_NAME]);
+  appStore.setGlobalUserInfo(result);
   return res;
 };

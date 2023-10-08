@@ -5,6 +5,7 @@ export const useAppStore = defineStore('app', {
     return {
       sidebarOpened: true,
       globalToken: null,
+      globalRefreshToken: null,
       globalUserInfo: null,
       size: 'default',
       language: 'zh-CN',
@@ -21,6 +22,10 @@ export const useAppStore = defineStore('app', {
     setGlobalToken(token) {
       this.globalToken = token;
     },
+    // 刷新token
+    setGlobalRefreshToken(token) {
+      this.globalRefreshToken = token;
+    },
     // 模拟获取菜单接口
     getMenusApi() {
       this.authMenusList = [
@@ -32,10 +37,12 @@ export const useAppStore = defineStore('app', {
         'from',
         'table',
         'coupon',
+        'tenant',
       ];
     },
     clearGlobalToken() {
       this.globalToken = null;
+      this.globalRefreshToken = null;
       this.authMenusList = [];
     },
     setGlobalUserInfo(userInfo) {

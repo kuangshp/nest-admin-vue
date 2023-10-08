@@ -5,8 +5,17 @@ export default {
     title: '系统管理',
     icon: 'personnel',
   },
-  redirect: '/system/account',
+  redirect: '/system/tenant',
   children: [
+    {
+      path: '/system/tenant',
+      name: 'tenant',
+      component: () => import('@/views/System/Tenant/index.vue'),
+      meta: {
+        title: '商户管理',
+        icon: 'permission',
+      },
+    },
     {
       path: '/system/account',
       name: 'account',
