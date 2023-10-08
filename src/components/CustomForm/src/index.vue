@@ -266,6 +266,7 @@
   const resetFields = () => {
     // 重置element-plus的表单
     formRef.value.resetFields();
+    emits('queryHandler', {});
     // 获取到富文本的配置项
     if (props.options && props.options.length) {
       const prop = props.options.find((item) => item.type === 'editor')?.prop;
