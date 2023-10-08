@@ -42,16 +42,16 @@
       </template>
     </CustomTable>
     <!-- 添加和编辑弹框 -->
-    <!-- <TenantDialog ref="tenantDialogRef" @updateTable="initTableData"></TenantDialog>
-    <RechargeDialog ref="rechargeDialogRef" @updateTable="initTableData"></RechargeDialog> -->
+    <TenantDialog ref="tenantDialogRef" @updateTable="initTableData"></TenantDialog>
+    <RechargeDialog ref="rechargeDialogRef" @updateTable="initTableData"></RechargeDialog>
   </div>
 </template>
 
 <script setup>
   import { onMounted } from 'vue';
   import { tableOptions, queryFormOption } from './index.js';
-  // import TenantDialog from './components/TenantDialog.vue';
-  // import RechargeDialog from './components/RechargeDialog.vue';
+  import TenantDialog from './components/TenantDialog.vue';
+  import RechargeDialog from './components/RechargeDialog.vue';
   import { TenantService } from '@/services';
   import { useRouter } from 'vue-router';
 
