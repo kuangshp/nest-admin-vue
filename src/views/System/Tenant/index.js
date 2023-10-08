@@ -1,5 +1,11 @@
 export const tableOptions = [
   {
+    align: 'center',
+    width: 50,
+    type: 'selection',
+    fixed: 'left',
+  },
+  {
     prop: 'name',
     label: '商户名称',
     width: 180,
@@ -21,11 +27,6 @@ export const tableOptions = [
     slot: 'accountTotal',
     align: 'center',
   },
-  {
-    prop: 'roleName',
-    label: '角色名称',
-    width: 120,
-  },
   // {
   //   prop: 'email',
   //   label: '电邮',
@@ -42,18 +43,26 @@ export const tableOptions = [
     align: 'center',
     slot: 'balance',
   },
-  // {
-  //   prop: 'legalPerson',
-  //   label: '法人',
-  // },
-  // {
-  //   prop: 'businessLicenseUrl',
-  //   label: '营业执照',
-  // },
-  // {
-  //   prop: 'address',
-  //   label: '地址',
-  // },
+  {
+    prop: 'provinceName',
+    label: '省份',
+    width: 180,
+  },
+  {
+    prop: 'cityName',
+    label: '市',
+    width: 180,
+  },
+  {
+    prop: 'areaName',
+    label: '地区',
+    width: 180,
+  },
+  {
+    prop: 'address',
+    label: '地址',
+    width: 180,
+  },
   {
     prop: 'status',
     label: '状态',
@@ -81,13 +90,13 @@ export const tableOptions = [
     align: 'center',
     width: 180,
   },
-  {
-    label: '操作',
-    action: true,
-    align: 'center',
-    width: 300,
-    fixed: 'right',
-  },
+  // {
+  //   label: '操作',
+  //   action: true,
+  //   align: 'center',
+  //   width: 300,
+  //   fixed: 'right',
+  // },
 ];
 export const queryFormOption = [
   {

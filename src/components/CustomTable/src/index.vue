@@ -13,23 +13,27 @@
           :width="item.width"
           :align="item.align"
           :fixed="item.fixed"
+          :type="item.type"
+          show-overflow-tooltip
         >
           <template #default="scope">
-            <!-- 如果有插槽的时候显示插槽,否则显示原本的 -->
-            <slot v-if="item.slot" :name="item.slot" :scope="scope"></slot>
-            <span v-else>
-              <!-- 对时间格式化处理化 -->
-              <template v-if="['createdAt', 'updatedAt', 'lastLoginDate'].includes(item.prop)">{{
-                formatDateStr(scope.row[item.prop], true)
-              }}</template>
-              <template v-else-if="item.prop == 'status'">
-                <el-tag type="success" v-if="scope.row[item.prop] == 0">正常</el-tag>
-                <el-tag type="danger" v-else>禁用</el-tag>
-              </template>
-              <template v-else>
-                {{ scope.row[item.prop] }}
-              </template>
-            </span>
+            <template v-if="!item.type">
+              <!-- 如果有插槽的时候显示插槽,否则显示原本的 -->
+              <slot v-if="item.slot" :name="item.slot" :scope="scope"></slot>
+              <span v-else>
+                <!-- 对时间格式化处理化 -->
+                <template v-if="['createdAt', 'updatedAt', 'lastLoginDate'].includes(item.prop)">{{
+                  formatDateStr(scope.row[item.prop], true)
+                }}</template>
+                <template v-else-if="item.prop == 'status'">
+                  <el-tag type="success" v-if="scope.row[item.prop] == 0">正常</el-tag>
+                  <el-tag type="danger" v-else>禁用</el-tag>
+                </template>
+                <template v-else>
+                  {{ scope.row[item.prop] }}
+                </template>
+              </span>
+            </template>
           </template>
         </el-table-column>
       </template>

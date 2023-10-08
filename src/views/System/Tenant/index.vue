@@ -14,6 +14,10 @@
     >
       <template #tableHeader>
         <el-button type="primary" @click="addNewHandler">新增</el-button>
+        <el-button type="primary" @click="rechargeHandler(scope.row)">充值</el-button>
+        <el-button type="primary" @click="editRowHandler(scope.row)">编辑</el-button>
+        <el-button type="danger" @click="rechargeHandler(scope.row)">状态</el-button>
+        <el-button type="danger" @click="deleteRowHandler(scope.row)">删除</el-button>
       </template>
       <template #accountTotal="{ scope }">
         <el-tag type="success" style="cursor: pointer" @click="toLinkAccountDetail(scope.row)">{{
