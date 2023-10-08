@@ -64,7 +64,7 @@
   import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import { useAppStore } from '@/stores/app';
-  import { AUTH_Token_NAME } from '@/constant';
+  import { AUTH_TOKEN_NAME } from '@/constant';
   import { validatePassword } from './rule';
   import { LoginService } from '@/services';
   import { useTagsViewStore } from '@/stores/tagsView';
@@ -73,7 +73,8 @@
   const loginForm = ref({
     username: 'admin',
     password: '123456',
-    captcha: '1234',
+    captcha: '',
+    codeText: '',
   });
 
   const loading = ref(false);
@@ -107,8 +108,11 @@
   // 初始化验证码
   const captchaUrl = ref(null);
   const initCaptcha = async () => {
-    const result = await LoginService.getCaptchaApi();
-    captchaUrl.value = result;
+    const {
+      result: { text, data },
+    } = await LoginService.getCaptchaApi();
+    captchaUrl.value = data;
+    loginForm.value.codeText = text;
   };
   const onChangePwdType = () => {
     if (passwordType.value === 'password') {
@@ -122,28 +126,17 @@
     // 1.进行表单验证
     loginFromRef.value.validate(async (valid) => {
       if (!valid) return;
-      // const result = await LoginService.loginApi(loginForm.value);
-      // console.log(result, '登录返回数据');
+      const result = await LoginService.loginApi(loginForm.value);
+      console.log(result, '登录返回数据');
       // 2.触发登陆操作
       loading.value = true;
-      window.localStorage.setItem(AUTH_Token_NAME, 'test');
+      window.localStorage.setItem(AUTH_TOKEN_NAME, 'test');
       appStore.setGlobalToken('test1');
       appStore.setGlobalUserInfo({ username: 'admin' });
       appStore.getMenusApi();
       // 全部关闭
       tagsViewStore.delAllView();
       router.push('/');
-      // store
-      //   .dispatch('user/login', loginForm.value)
-      //   .then(() => {
-      //     loading.value = false;
-      //     // TODO: 3.登录后操作
-      //     router.push('/');
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     loading.value = false;
-      //   });
     });
   };
   onMounted(() => {

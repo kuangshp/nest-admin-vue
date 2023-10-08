@@ -1,6 +1,6 @@
 export const base = 'admin-admin';
 export const APP_NAME = 'admin-admin';
-export const AUTH_Token_NAME = 'token';
+export const AUTH_TOKEN_NAME = 'token';
 export const authMobile = '';
 export const authEmail = 'auth-email';
 export const currentUser = 'current-user';
