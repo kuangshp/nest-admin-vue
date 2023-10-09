@@ -17,7 +17,7 @@
         <el-button type="primary" @click="addNewHandler">新增</el-button>
         <el-button type="primary" @click="rechargeHandler">充值</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
-        <el-button type="danger" @click="rechargeHandler">状态</el-button>
+        <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
         <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
       <template #accountTotal="{ scope }">
@@ -30,17 +30,6 @@
           scope.row.balance
         }}</el-tag>
       </template>
-      <!-- <template #action="{ scope }">
-        <el-button
-          size="small"
-          :type="scope.row.status == 1 ? 'info' : 'danger'"
-          @click="modifyStatusHandler(scope.row)"
-          >{{ scope.row.status == 1 ? '正常' : '禁用' }}</el-button
-        >
-        <el-button size="small" type="primary" @click="rechargeHandler(scope.row)">充值</el-button>
-        <el-button size="small" type="primary" @click="editRowHandler(scope.row)">编辑</el-button>
-        <el-button size="small" type="danger" @click="deleteRowHandler(scope.row)">删除</el-button>
-      </template> -->
     </CustomTable>
     <!-- 添加和编辑弹框 -->
     <TenantDialog ref="tenantDialogRef" @updateTable="initTableData"></TenantDialog>
@@ -70,12 +59,33 @@
     multipleSelection.value = val;
   };
 
+  // 获取表格数据
+  const initTableData = async (queryOption = {}) => {
+    const {
+      result: { data, total },
+    } = await TenantService.getPageApi(queryOption);
+    tableData.value = data;
+    pageTotal.value = total;
+    multipleSelection.value = [];
+  };
+  // 分页操作
+  const changePageHandler = ({ pageSize, pageNumber }) => {
+    initTableData({ pageSize: pageSize, pageNumber: pageNumber });
+  };
+
+  // 新增
   const tenantDialogRef = ref(null);
   const addNewHandler = async () => {
     tenantDialogRef.value.openDialog();
   };
+
+  // 编辑
   const editRowHandler = async (rowData) => {
-    tenantDialogRef.value.openDialog(rowData);
+    if (multipleSelection.value.length == 1) {
+      tenantDialogRef.value.openDialog(multipleSelection.value[0]);
+    } else {
+      ElMessage.warning('只能选择一行操作');
+    }
   };
   // 删除操作
   const deleteRowHandler = () => {
@@ -84,29 +94,21 @@
         const idList = multipleSelection.value.map((item) => item.id);
         await TenantService.batchDeleteByIdListApi(idList);
         ElMessage.success('删除成功');
-        // initTableData();
+        initTableData();
       });
     } else {
       ElMessage.warning('请选择行操作');
     }
   };
-  // 获取表格数据
-  const initTableData = async (queryOption = {}) => {
-    const {
-      result: { data, total },
-    } = await TenantService.getPageApi(queryOption);
-    tableData.value = data;
-    pageTotal.value = total;
-  };
-  // 分页操作
-  const changePageHandler = ({ pageSize, pageNumber }) => {
-    initTableData({ pageSize: pageSize, pageNumber: pageNumber });
-  };
 
   // 充值
   const rechargeDialogRef = ref(null);
   const rechargeHandler = (rowData) => {
-    rechargeDialogRef.value.openDialog(rowData);
+    if (multipleSelection.value.length == 1) {
+      rechargeDialogRef.value.openDialog(multipleSelection.value[0]);
+    } else {
+      ElMessage.warning('只能选择一行操作');
+    }
   };
   // 查看团队成员
   const accountDialogRef = ref(null);
@@ -118,11 +120,15 @@
     router.push({ path: '/record/balance', query: { tenantId: rowData.id } });
   };
   // 修改状态
-  const modifyStatusHandler = async (rowData) => {
-    console.log(rowData);
-    await TenantService.modifyStatusByIdApi(rowData.id);
-    ElMessage.success('修改成功');
-    initTableData();
+  const modifyStatusHandler = async () => {
+    if (multipleSelection.value.length) {
+      const idList = multipleSelection.value.map((item) => item.id);
+      await TenantService.batchStatusByIdListApi(idList);
+      ElMessage.success('修改成功');
+      initTableData();
+    } else {
+      ElMessage.warning('请选择行操作');
+    }
   };
   onMounted(() => {
     initTableData();

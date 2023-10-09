@@ -124,6 +124,7 @@
     cityId: null,
     areaId: null,
     expireTime: null,
+    address: null,
   });
   const cancelHandler = () => {
     formData.value = {
@@ -136,6 +137,7 @@
       cityId: null,
       areaId: null,
       expireTime: null,
+      address: null,
     };
     dialogVisible.value = false;
   };
@@ -155,6 +157,7 @@
         cityId: null,
         areaId: null,
         expireTime: null,
+        address: null,
       };
     } else {
       newRowDate.value = rowData;
@@ -169,7 +172,11 @@
         cityId: rowData.cityId,
         areaId: rowData.areaId,
         expireTime: rowData.expireTime,
+        address: rowData.address,
       };
+      // TODO 编辑的时候要请求市和县
+      await initCityHandler(rowData.provinceId);
+      await initAreaHandler(rowData.cityId);
     }
     dialogVisible.value = true;
   };
