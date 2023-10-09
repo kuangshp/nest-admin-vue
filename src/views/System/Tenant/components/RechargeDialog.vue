@@ -15,8 +15,8 @@
           :model="formData"
           ref="formRef"
         >
-          <el-form-item label="金额" prop="balance">
-            <el-input v-model.number="formData.balance" placeholder="请输入充值金额" />
+          <el-form-item label="金额" prop="amount">
+            <el-input v-model.number="formData.amount" placeholder="请输入充值金额" />
           </el-form-item>
         </el-form>
       </div>
@@ -38,7 +38,7 @@
   const cancelHandler = () => {
     formData.value = {
       tenantId: null,
-      balance: null,
+      amount: null,
     };
     dialogVisible.value = false;
   };
@@ -47,7 +47,7 @@
     dialogVisible.value = true;
   };
   const formRule = ref({
-    balance: [
+    amount: [
       {
         required: true,
         message: `充值金额必填`,
@@ -58,7 +58,7 @@
   });
   const formData = ref({
     tenantId: null,
-    balance: null,
+    amount: null,
   });
   const formRef = ref(null);
   const emit = defineEmits(['updateTable']);

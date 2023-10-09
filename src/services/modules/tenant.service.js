@@ -28,4 +28,8 @@ export class TenantService extends BaseService {
   static async getPageApi(queryOption) {
     return BaseService.get('/admin/tenant', queryOption);
   }
+
+  static async rechargeApi(postData) {
+    return BaseService.post('/admin/tenant/recharge', postData);
+  }
 }
