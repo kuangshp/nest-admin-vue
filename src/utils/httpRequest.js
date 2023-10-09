@@ -174,5 +174,5 @@ const refreshToken = async () => {
   appStore.setGlobalToken(result[AUTH_TOKEN_NAME]);
   appStore.setGlobalRefreshToken(result[AUTH_REFRESH_TOKEN_NAME]);
   appStore.setGlobalUserInfo(result);
-  return res;
+  return result;
 };

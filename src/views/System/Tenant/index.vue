@@ -11,13 +11,14 @@
       border
       style="margin-top: 20px"
       @changePageHandler="changePageHandler"
+      @selection-change="handleSelectionChange"
     >
       <template #tableHeader>
         <el-button type="primary" @click="addNewHandler">新增</el-button>
-        <el-button type="primary" @click="rechargeHandler(scope.row)">充值</el-button>
-        <el-button type="primary" @click="editRowHandler(scope.row)">编辑</el-button>
-        <el-button type="danger" @click="rechargeHandler(scope.row)">状态</el-button>
-        <el-button type="danger" @click="deleteRowHandler(scope.row)">删除</el-button>
+        <el-button type="primary" @click="rechargeHandler">充值</el-button>
+        <el-button type="primary" @click="editRowHandler">编辑</el-button>
+        <el-button type="danger" @click="rechargeHandler">状态</el-button>
+        <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
       <template #accountTotal="{ scope }">
         <el-tag type="success" style="cursor: pointer" @click="toLinkAccountDetail(scope.row)">{{
@@ -29,7 +30,7 @@
           scope.row.balance
         }}</el-tag>
       </template>
-      <template #action="{ scope }">
+      <!-- <template #action="{ scope }">
         <el-button
           size="small"
           :type="scope.row.status == 1 ? 'info' : 'danger'"
@@ -39,7 +40,7 @@
         <el-button size="small" type="primary" @click="rechargeHandler(scope.row)">充值</el-button>
         <el-button size="small" type="primary" @click="editRowHandler(scope.row)">编辑</el-button>
         <el-button size="small" type="danger" @click="deleteRowHandler(scope.row)">删除</el-button>
-      </template>
+      </template> -->
     </CustomTable>
     <!-- 添加和编辑弹框 -->
     <TenantDialog ref="tenantDialogRef" @updateTable="initTableData"></TenantDialog>
@@ -54,6 +55,7 @@
   import RechargeDialog from './components/RechargeDialog.vue';
   import { TenantService } from '@/services';
   import { useRouter } from 'vue-router';
+  import { ElMessage, ElMessageBox } from 'element-plus';
 
   const router = useRouter();
   const tableData = ref([]);
@@ -61,6 +63,13 @@
   const queryHandler = (queryData) => {
     initTableData({ ...queryData, pageSize: 10, pageNumber: 1 });
   };
+
+  // 多选操作
+  const multipleSelection = ref([]);
+  const handleSelectionChange = (val) => {
+    multipleSelection.value = val;
+  };
+
   const tenantDialogRef = ref(null);
   const addNewHandler = async () => {
     tenantDialogRef.value.openDialog();
@@ -69,12 +78,17 @@
     tenantDialogRef.value.openDialog(rowData);
   };
   // 删除操作
-  const deleteRowHandler = (rowData) => {
-    ElMessageBox.confirm('确定要删除', '删除提示').then(async () => {
-      await TenantService.deleteByIdApi(rowData.id);
-      ElMessage.success('删除成功');
-      initTableData();
-    });
+  const deleteRowHandler = () => {
+    if (multipleSelection.value.length) {
+      ElMessageBox.confirm('确定要删除', '删除提示').then(async () => {
+        const idList = multipleSelection.value.map((item) => item.id);
+        await TenantService.batchDeleteByIdListApi(idList);
+        ElMessage.success('删除成功');
+        // initTableData();
+      });
+    } else {
+      ElMessage.warning('请选择行操作');
+    }
   };
   // 获取表格数据
   const initTableData = async (queryOption = {}) => {

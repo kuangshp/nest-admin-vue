@@ -47,32 +47,40 @@ export const urlObjectParams = (data) => {
  * @return {*}
  */
 export const objValueTrim = (obj) => {
-  const newObj = {};
-  for (const key in obj) {
-    if (Array.isArray(obj[key])) {
-      newObj[key] = obj[key];
-    } else {
-      //  Number.isFinite(obj[key])如果是数字的话就转换字符串去重空格
-      newObj[key] = Number.isFinite(obj[key])
-        ? +obj[key].toString().trim()
-        : obj[key]
-        ? obj[key].toString().trim()
-        : '';
+  if (Array.isArray(obj)) {
+    return obj.filter((item) => item !== undefined);
+  } else {
+    const newObj = {};
+    for (const key in obj) {
+      if (Array.isArray(obj[key])) {
+        newObj[key] = obj[key];
+      } else {
+        //  Number.isFinite(obj[key])如果是数字的话就转换字符串去重空格
+        newObj[key] = Number.isFinite(obj[key])
+          ? +obj[key].toString().trim()
+          : obj[key]
+          ? obj[key].toString().trim()
+          : '';
+      }
     }
+    return newObj;
   }
-  return newObj;
 };
 
 // 过滤数据中的空
 export const objCleanEmpty = (obj) => {
-  const newParams = {};
-  for (const key in obj) {
-    if (Object.hasOwnProperty.call(obj, key)) {
-      const element = obj[key];
-      if (element !== null && element !== '') {
-        newParams[key] = element;
+  if (Array.isArray(obj)) {
+    return obj;
+  } else {
+    const newParams = {};
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+        const element = obj[key];
+        if (element !== null && element !== '') {
+          newParams[key] = element;
+        }
       }
     }
+    return newParams;
   }
-  return newParams;
 };

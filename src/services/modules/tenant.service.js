@@ -5,6 +5,11 @@ export class TenantService extends BaseService {
     return BaseService.post('/admin/tenant', postData);
   }
 
+  static async batchDeleteByIdListApi(postData) {
+    console.log(postData, '????==');
+    return BaseService.post('/admin/tenant/delete', postData);
+  }
+
   static async deleteByIdApi(id) {
     return BaseService.delete(`/admin/tenant/${id}`);
   }
