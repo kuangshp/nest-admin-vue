@@ -23,7 +23,7 @@
       </template>
       <template #accountTotal="{ scope }">
         <el-tag type="success" style="cursor: pointer" @click="toLinkAccountDetail(scope.row)">{{
-          scope.row.accountTotal
+          scope.row.accountTotal ?? 0
         }}</el-tag>
       </template>
       <template #balance="{ scope }">

@@ -46,7 +46,10 @@
   import { tableOptions, queryFormOption, formOption } from './index.js';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { ref } from 'vue';
+  import { useRoute } from 'vue-router';
 
+  const route = useRoute();
+  console.log(route.query.tenantId, '???');
   const tableData = ref([]);
   const pageTotal = ref(0);
   // 搜索
@@ -64,7 +67,7 @@
   const initTableData = async (queryOption = {}) => {
     const {
       result: { data, total },
-    } = await AccountService.getPageApi(queryOption);
+    } = await AccountService.getPageApi({ ...queryOption, tenantId: route.query.tenantId });
     tableData.value = data;
     pageTotal.value = total;
     multipleSelection.value = [];
