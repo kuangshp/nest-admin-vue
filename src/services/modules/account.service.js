@@ -28,4 +28,8 @@ export class AccountService extends BaseService {
   static async getPageApi(queryOption) {
     return BaseService.get('/admin/account', queryOption);
   }
+
+  static async getListApi(queryOption) {
+    return BaseService.get('/admin/account/list', queryOption);
+  }
 }

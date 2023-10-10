@@ -43,7 +43,7 @@
 
 <script setup>
   import { AccountService } from '@/services';
-  import { tableOptions, queryFormOption, formOption } from './index.js';
+  import { tableOptions, queryFormOption } from './index.js';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
@@ -78,6 +78,7 @@
   };
 
   // 新增
+
   const formData = ref({
     username: '',
     sort: 1,
@@ -85,6 +86,7 @@
   const isVisibleDialog = ref(false);
   const title = ref('');
   const addNewHandler = async () => {
+    await initAccountList();
     title.value = '新增账号';
     isVisibleDialog.value = true;
     formData.value = {
@@ -96,6 +98,7 @@
   // 编辑
   const editRowHandler = async (rowData) => {
     if (multipleSelection.value.length == 1) {
+      await initAccountList();
       const rowData = multipleSelection.value[0];
       title.value = '编辑账号';
       formData.value = {
@@ -150,6 +153,44 @@
     }
   };
 
+  // 初始化父节点下拉框
+  const parentList = ref([]);
+  const initAccountList = async () => {
+    const { result } = await AccountService.getListApi();
+    console.log(result);
+    parentList.value = result.map((item) => {
+      return {
+        type: 'option',
+        label: item.username,
+        value: item.id,
+      };
+    });
+  };
+  const formOption = ref([
+    {
+      type: 'input',
+      label: '用户名',
+      prop: 'username',
+      required: true,
+    },
+    {
+      type: 'select',
+      label: '父节点',
+      prop: 'parentId',
+      children: parentList,
+      attrs: {
+        style: {
+          width: '100%',
+        },
+        clearable: true,
+      },
+    },
+    {
+      type: 'number',
+      label: '排序',
+      prop: 'sort',
+    },
+  ]);
   onMounted(() => {
     initTableData();
   });

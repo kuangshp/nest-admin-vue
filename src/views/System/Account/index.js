@@ -72,17 +72,3 @@ export const queryFormOption = [
     ],
   },
 ];
-
-export const formOption = [
-  {
-    type: 'input',
-    label: '用户名',
-    prop: 'username',
-    required: true,
-  },
-  {
-    type: 'number',
-    label: '排序',
-    prop: 'sort',
-  },
-];

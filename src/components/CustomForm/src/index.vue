@@ -25,6 +25,8 @@
               v-model="model[item.prop]"
               v-if="!['upload', 'editor'].includes(item.type)"
               autocomplete="new-password"
+              style="width: 100%"
+              clearable
             ></component>
             <!-- 上传组件 -->
             <el-upload
@@ -72,6 +74,8 @@
                 :is="`el-${child.type}`"
                 :label="child.label"
                 :value="child.value"
+                style="width: 100%"
+                clearable
               ></component>
             </component>
           </el-form-item>
