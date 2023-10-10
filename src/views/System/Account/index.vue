@@ -84,6 +84,10 @@
   const addNewHandler = async () => {
     title.value = '新增账号';
     isVisibleDialog.value = true;
+    formData.value = {
+      username: null,
+      sort: null,
+    };
   };
 
   // 编辑
@@ -142,6 +146,7 @@
       ElMessage.warning('请选择行操作');
     }
   };
+
   onMounted(() => {
     initTableData();
   });

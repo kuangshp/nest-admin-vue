@@ -32,4 +32,8 @@ export class TenantService extends BaseService {
   static async rechargeApi(postData) {
     return BaseService.post('/admin/tenant/recharge', postData);
   }
+  // 默认账号
+  static async defaultAccountApi(postData) {
+    return BaseService.post('/admin/tenant/defaultAccount', postData);
+  }
 }

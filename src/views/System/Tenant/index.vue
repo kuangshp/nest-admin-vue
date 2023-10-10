@@ -15,6 +15,7 @@
     >
       <template #tableHeader>
         <el-button type="primary" @click="addNewHandler">新增</el-button>
+        <el-button type="primary" @click="addDefaultAccountHandler">创建账号</el-button>
         <el-button type="primary" @click="rechargeHandler">充值</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
         <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
@@ -34,6 +35,14 @@
     <!-- 添加和编辑弹框 -->
     <TenantDialog ref="tenantDialogRef" @updateTable="initTableData"></TenantDialog>
     <RechargeDialog ref="rechargeDialogRef" @updateTable="initTableData"></RechargeDialog>
+    <!-- 新增账号 -->
+    <FormDialog
+      title="新增账号"
+      v-model:visible="isVisibleDialog"
+      :options="formOption"
+      :formData="formData"
+      @getFormData="getFormData"
+    ></FormDialog>
   </div>
 </template>
 
@@ -129,6 +138,39 @@
     } else {
       ElMessage.warning('请选择行操作');
     }
+  };
+  // 新增账号
+  const isVisibleDialog = ref(false);
+  const formOption = ref([
+    {
+      type: 'input',
+      label: '用户名',
+      prop: 'username',
+      required: true,
+    },
+    {
+      type: 'number',
+      label: '排序',
+      prop: 'sort',
+    },
+  ]);
+  const formData = ref({
+    username: '',
+    sort: '',
+  });
+  const addDefaultAccountHandler = async () => {
+    if (multipleSelection.value.length) {
+      isVisibleDialog.value = true;
+    } else {
+      ElMessage.warning('请选择行操作');
+    }
+  };
+  // 提交
+  const getFormData = async (formData) => {
+    await TenantService.defaultAccountApi({ ...formData, tenantId: multipleSelection.value[0].id });
+    ElMessage.success('修改成功');
+    initTableData();
+    isVisibleDialog.value = false;
   };
   onMounted(() => {
     initTableData();
