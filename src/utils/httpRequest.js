@@ -110,10 +110,10 @@ axiosInstance.interceptors.response.use(
             if (!config.url.includes('/refresh')) {
               // 刷新token
               refreshing = true;
-              const res = await refreshToken();
+              const { code } = await refreshToken();
               refreshing = false;
               console.log(res, '刷新结构');
-              if (res.status === 200) {
+              if (code === 0) {
                 queue.forEach(({ config, resolve }) => {
                   resolve(axiosInstance(config));
                 });
@@ -165,14 +165,14 @@ axiosInstance.interceptors.response.use(
 // 刷新token
 const refreshToken = async () => {
   const appStore = useAppStore();
-  const { result } = await axiosInstance.get('/admin/refresh', {
+  const result = await axiosInstance.get('/admin/refresh', {
     params: {
       token: appStore.globalRefreshToken,
     },
   });
   console.log(result, '刷新token请求');
-  appStore.setGlobalToken(result[AUTH_TOKEN_NAME]);
-  appStore.setGlobalRefreshToken(result[AUTH_REFRESH_TOKEN_NAME]);
-  appStore.setGlobalUserInfo(result);
+  appStore.setGlobalToken(result.result[AUTH_TOKEN_NAME]);
+  appStore.setGlobalRefreshToken(result.result[AUTH_REFRESH_TOKEN_NAME]);
+  appStore.setGlobalUserInfo(result.result);
   return result;
 };
