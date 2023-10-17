@@ -5,6 +5,7 @@ import CustomTable from './CustomTable';
 import Pagination from './Pagination';
 import SvgIcon from './SvgIcon';
 import InputNumber from './InputNumber';
+import TreeSelect from './TreeSelect';
 
 const components = [
   CustomForm,
@@ -14,6 +15,7 @@ const components = [
   Pagination,
   SvgIcon,
   InputNumber,
+  TreeSelect,
 ];
 
 export default {

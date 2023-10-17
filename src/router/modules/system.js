@@ -37,16 +37,16 @@ export default {
       //   },
       // ],
     },
-    {
-      path: '/system/accountDetail',
-      name: 'accountDetail',
-      component: () => import('@/views/System/Account/Detail.vue'),
-      meta: {
-        title: '账号详情',
-        icon: 'personnel-manage',
-        hidden: true,
-      },
-    },
+    // {
+    //   path: '/system/accountDetail',
+    //   name: 'accountDetail',
+    //   component: () => import('@/views/System/Account/Detail.vue'),
+    //   meta: {
+    //     title: '账号详情',
+    //     icon: 'personnel-manage',
+    //     hidden: true,
+    //   },
+    // },
     {
       path: '/system/role',
       name: 'role',

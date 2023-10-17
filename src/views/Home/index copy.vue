@@ -3,60 +3,69 @@
   <div id="app">
     <div class="box">
       {{ value }}==
-      <TreeSelect v-model:treeValue="value" :options="options" placeholder="请选择" />
+      <TreeSelect v-model="value" :options="options" placeholder="请选择" />
     </div>
     <br />
     <br />
-    <div class="box">
-      <treeselect v-model="value" :options="options" />
-    </div>
     <br />
     <br />
     <el-input v-model="value" placeholder="请选择"></el-input>
   </div>
 </template>
 
-<script setup>
-  import Treeselect from 'vue3-treeselect';
-  // import the styles
-  import 'vue3-treeselect/dist/vue3-treeselect.css';
-  const options = ref([
-    {
-      id: '1',
-      label: 'a',
-      children: [
-        {
-          id: '2',
-          label: 'aa',
-        },
-        {
-          id: '3',
-          label: 'ab',
-        },
-      ],
+<script>
+  export default {
+    // register the component
+    // components: { Treeselect },
+    methods: {
+      changeHandler(value) {
+        console.log(value, '???');
+      },
     },
-    {
-      id: '4',
-      label: 'b',
+    data() {
+      return {
+        // define the default value
+        value: null,
+        // define options
+        options: [
+          {
+            id: '1',
+            label: 'a',
+            children: [
+              {
+                id: '2',
+                label: 'aa',
+              },
+              {
+                id: '3',
+                label: 'ab',
+              },
+            ],
+          },
+          {
+            id: '4',
+            label: 'b',
+          },
+          {
+            id: '5',
+            label: 'c',
+          },
+          {
+            id: '6',
+            label: 'd',
+          },
+          {
+            id: '7',
+            label: 'e',
+          },
+          {
+            id: '8',
+            label: 'f',
+          },
+        ],
+      };
     },
-    {
-      id: '5',
-      label: 'c',
-    },
-    {
-      id: '6',
-      label: 'd',
-    },
-    {
-      id: '7',
-      label: 'e',
-    },
-    {
-      id: '8',
-      label: 'f',
-    },
-  ]);
-  const value = ref(null);
+  };
 </script>
 <style scoped lang="scss">
   .box {

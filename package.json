@@ -33,6 +33,7 @@
     "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4",
+    "vue3-treeselect": "^0.1.10",
     "wangeditor": "^4.7.15"
   },
   "devDependencies": {

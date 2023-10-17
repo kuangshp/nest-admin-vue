@@ -7,9 +7,11 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    2: typeof import('./components/TreeSelect/src/index copy 2.vue')['default']
     AppHeader: typeof import('./layout/components/AppHeader/index.vue')['default']
     AppMain: typeof import('./layout/components/AppMain/index.vue')['default']
     Breadcrumb: typeof import('./layout/components/AppHeader/components/Breadcrumb/index.vue')['default']
+    copy: typeof import('./components/TreeSelect/src/index copy.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -35,8 +37,11 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Hamburger: typeof import('./layout/components/AppHeader/components/Hamburger/index.vue')['default']
+    Index1: typeof import('./components/TreeSelect/src/index1.vue')['default']
+    Index2: typeof import('./components/TreeSelect/src/index2.vue')['default']
     InputNumber: typeof import('./components/InputNumber/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -46,5 +51,6 @@ declare module 'vue' {
     Src: typeof import('./components/CustomForm/src/index.vue')['default']
     TagsView: typeof import('./layout/components/TagsView/index.vue')['default']
     TagViewItem: typeof import('./layout/components/TagsView/TagViewItem.vue')['default']
+    TreeSelect: typeof import('./components/TreeSelect/index.vue')['default']
   }
 }

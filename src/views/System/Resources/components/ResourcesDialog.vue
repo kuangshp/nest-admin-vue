@@ -16,7 +16,12 @@
           ref="formRef"
         >
           <el-form-item label="类型" prop="resourcesType">
-            <el-select v-model="formData.resourcesType" placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="formData.resourcesType"
+              placeholder="请选择"
+              style="width: 100%"
+              @change="resourcesTypeChangeHandler"
+            >
               <el-option label="模块" :value="0"></el-option>
               <el-option label="菜单" :value="1"></el-option>
               <el-option label="按钮" :value="2"></el-option>
@@ -25,21 +30,47 @@
           <el-form-item label="名称" prop="title">
             <el-input v-model="formData.title" placeholder="请输入名称" />
           </el-form-item>
-          <el-form-item label="父级" prop="parentId">
-            <el-select v-model="formData.parentId" placeholder="请选择" style="width: 100%">
+          <el-form-item
+            label="父级"
+            prop="parentId"
+            v-if="isShowParentItem && formData.resourcesType != 0"
+          >
+            <el-select
+              v-model="formData.parentId"
+              placeholder="请选择"
+              style="width: 100%"
+              v-if="formData.resourcesType == 1"
+            >
               <el-option
                 v-for="(item, index) of treeDataList"
                 :key="index"
-                :label="item.title"
+                :label="item.label"
                 :value="item.id"
               ></el-option>
             </el-select>
-            <!-- <TreeSelect :options="treeDataList" v-model="formData.parentId" /> -->
+            <TreeSelect
+              v-if="formData.resourcesType == 2"
+              :options="treeDataList"
+              v-model="formData.parentId"
+            />
           </el-form-item>
           <el-form-item label="URL地址" prop="url">
             <el-input v-model="formData.url" placeholder="请输入URL地址" />
           </el-form-item>
-          <el-form-item label="ICON图标" prop="icon">
+          <el-form-item label="请求方式" prop="method" v-if="formData.resourcesType == 2">
+            <el-select
+              v-model="formData.method"
+              placeholder="请选择请求方式"
+              style="width: 100%"
+              clearable
+            >
+              <el-option label="GET" value="GET"></el-option>
+              <el-option label="POST" value="POST"></el-option>
+              <el-option label="PUT" value="PUT"></el-option>
+              <el-option label="DELETE" value="DELETE"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="ICON图标" prop="icon" v-else>
             <el-input v-model="formData.icon" placeholder="请输入ICON图标" />
           </el-form-item>
           <el-form-item label="排序" prop="sort">
@@ -73,6 +104,7 @@
     url: null,
     icon: null,
     sort: null,
+    method: '',
     description: null,
   });
   const cancelHandler = () => {
@@ -83,6 +115,7 @@
       url: null,
       icon: null,
       sort: null,
+      method: null,
       description: null,
     };
     dialogVisible.value = false;
@@ -104,9 +137,9 @@
         icon: rowData.icon,
         sort: rowData.sort,
         description: rowData.description,
+        method: rowData.method,
       };
     }
-    initResource();
     dialogVisible.value = true;
   };
   const formRule = ref({
@@ -125,16 +158,19 @@
       },
     ],
   });
-  const initResource = async () => {
-    const { result } = await ResourcesService.getCatalogApi();
-    console.log(result);
+  const isShowParentItem = ref(false);
+  const resourcesTypeChangeHandler = async (value) => {
+    if (!value) return;
+    isShowParentItem.value = false;
+    formData.value.parentId = null;
+    const { result } = await ResourcesService.getCatalogApi({ catalogType: value });
     treeDataList.value = result.map((item) => {
       return {
         ...item,
-
         label: item.title,
       };
     });
+    isShowParentItem.value = true;
   };
   const formRef = ref(null);
   const emit = defineEmits(['updateTable']);
@@ -143,6 +179,7 @@
       if (valid) {
         const postData = {
           ...formData.value,
+          sort: formData.sort ?? 1,
         };
         if (newRowDate.value && Object.keys(newRowDate.value).length) {
           await ResourcesService.modifyByIdApi(newRowDate.value.id, postData);
