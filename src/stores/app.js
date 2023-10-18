@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
+import { MenusService } from '@/services';
 import router from '@/router';
+import { getTreeList } from '@/utils';
 export const useAppStore = defineStore('app', {
   state: () => {
     return {
@@ -11,6 +13,7 @@ export const useAppStore = defineStore('app', {
       language: 'zh-CN',
       // TODO 实际开发替换模拟后端返回的菜单列表
       authMenusList: [],
+      menusTreeList: [],
     };
   },
   getters: {},
@@ -27,23 +30,17 @@ export const useAppStore = defineStore('app', {
       this.globalRefreshToken = token;
     },
     // 模拟获取菜单接口
-    getMenusApi() {
-      this.authMenusList = [
-        'account',
-        'resources',
-        'accountDetail',
-        'baidu',
-        'role',
-        'from',
-        'table',
-        'coupon',
-        'tenant',
-      ];
+    async getMenusApi() {
+      const { result } = await MenusService.getAllMenusApi();
+      console.log(result, '全部的菜单');
+      this.authMenusList = result;
+      this.menusTreeList = getTreeList(result, 'id', 'parentId');
     },
     clearGlobalToken() {
       this.globalToken = null;
       this.globalRefreshToken = null;
       this.authMenusList = [];
+      this.menusTreeList = [];
     },
     setGlobalUserInfo(userInfo) {
       this.globalUserInfo = userInfo;

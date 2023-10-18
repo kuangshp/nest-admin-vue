@@ -6,3 +6,4 @@ export * from './modules/role.service';
 export * from './modules/resources.service';
 export * from './modules/role.resources.service';
 export * from './modules/account.role.service';
+export * from './modules/menus.service';

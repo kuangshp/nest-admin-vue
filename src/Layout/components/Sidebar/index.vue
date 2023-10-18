@@ -24,9 +24,9 @@
         <SideBarItem
           :sidebarOpened="!props.sidebarOpened"
           v-for="route in menuRoutes"
-          :key="route.path"
+          :key="route.url"
           :route="route"
-          :basePath="route.path"
+          :basePath="route.url"
         ></SideBarItem>
       </el-menu>
     </el-scrollbar>
@@ -35,7 +35,11 @@
 
 <script setup>
   import SideBarItem from './SideBarItem.vue';
+  import { useAppStore } from '@/stores/app';
+  import { getTreeList } from '@/utils';
+  import { computed } from 'vue';
 
+  const appStore = useAppStore();
   const logoHeight = 44;
   const props = defineProps({
     sidebarOpened: {
@@ -50,11 +54,8 @@
   const activeMenu = computed(() => {
     return route.path;
   });
-
-  // 导入路由表
-  import { routes } from '@/router';
   // 渲染路由
-  const menuRoutes = computed(() => routes);
+  const menuRoutes = appStore.menusTreeList;
 </script>
 
 <style lang="scss" scoped>

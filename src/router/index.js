@@ -66,10 +66,9 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done();
       next('/');
     } else {
-      // TODO 处理菜单
       // 模拟后端返回的菜单权限菜单
-      // console.log(to.name, appStore.authMenusList);
-      if (appStore.authMenusList.includes(to.name) || whiteList.includes(to.name)) {
+      const authMenusUrlList = appStore.authMenusList.map((item) => item.url);
+      if (authMenusUrlList.includes(to.path) || whiteList.includes(to.name)) {
         NProgress.done();
         next();
       } else {

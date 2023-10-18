@@ -48,7 +48,7 @@
   const currentRouterRef = ref(null);
   // 是否是当前应该激活的tag
   const isActive = (tag) => {
-    return tag.path === route.path;
+    return tag && tag.path === route.path;
   };
 
   const isAffix = (tag) => {
