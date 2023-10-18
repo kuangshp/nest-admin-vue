@@ -45,12 +45,13 @@
 </template>
 
 <script setup>
-  import { AccountService } from '@/services';
+  import { AccountService, DepartmentService } from '@/services';
   import { tableOptions, queryFormOption } from './index.js';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
   import AccountRoleDialog from './components/AccountRoleDialog.vue';
+  import { getTreeList } from '@/utils';
 
   const route = useRoute();
   console.log(route.query.tenantId, '???');
@@ -91,6 +92,7 @@
   const title = ref('');
   const addNewHandler = async () => {
     await initAccountList();
+    await initDepartment();
     title.value = '新增账号';
     isVisibleDialog.value = true;
     formData.value = {
@@ -103,12 +105,10 @@
   const editRowHandler = async (rowData) => {
     if (multipleSelection.value.length == 1) {
       await initAccountList();
+      await initDepartment();
       const rowData = multipleSelection.value[0];
       title.value = '编辑账号';
-      formData.value = {
-        username: rowData.username,
-        sort: rowData.sort,
-      };
+      formData.value = rowData;
       isVisibleDialog.value = true;
     } else {
       ElMessage.warning('只能选择一行操作');
@@ -162,13 +162,35 @@
   const initAccountList = async () => {
     const { result } = await AccountService.getListApi();
     console.log(result);
-    parentList.value = result.map((item) => {
+    const list = result.map((item) => {
       return {
-        type: 'option',
-        label: item.username,
+        ...item,
         value: item.id,
+        label: item.username,
       };
     });
+    parentList.value = getTreeList(list, 'id', 'parentId');
+  };
+
+  const departmentList = ref([]);
+  const initDepartment = async () => {
+    const { result } = await DepartmentService.getListApi();
+    const list = [
+      {
+        id: -1,
+        value: -1,
+        label: '顶级部门',
+        parentId: 0,
+      },
+      ...result.map((item) => {
+        return {
+          ...item,
+          value: item.id,
+          label: item.title,
+        };
+      }),
+    ];
+    departmentList.value = getTreeList(list, 'id', 'parentId');
   };
   const formOption = ref([
     {
@@ -178,10 +200,22 @@
       required: true,
     },
     {
-      type: 'select',
+      type: 'treeSelect',
       label: '父节点',
       prop: 'parentId',
-      children: parentList,
+      data: parentList,
+      attrs: {
+        style: {
+          width: '100%',
+        },
+        clearable: true,
+      },
+    },
+    {
+      type: 'treeSelect',
+      label: '部门',
+      prop: 'departmentId',
+      data: departmentList,
       attrs: {
         style: {
           width: '100%',
