@@ -58,6 +58,16 @@ export default {
       },
     },
     {
+      path: '/system/department',
+      name: 'department',
+      component: () => import('@/views/System/Department/index.vue'),
+      meta: {
+        title: '部门管理',
+        icon: 'role',
+        keepAlive: true,
+      },
+    },
+    {
       path: '/system/resources',
       name: 'resources',
       component: () => import('@/views/System/Resources/index.vue'),

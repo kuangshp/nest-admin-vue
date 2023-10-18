@@ -179,9 +179,11 @@
       if (valid) {
         const postData = {
           ...formData.value,
-          sort: formData.sort ?? 1,
+          sort: formData.value.sort ?? 1,
         };
+        console.log(postData);
         if (newRowDate.value && Object.keys(newRowDate.value).length) {
+          console.log('编辑');
           await ResourcesService.modifyByIdApi(newRowDate.value.id, postData);
           ElMessage.success('修改成功');
         } else {

@@ -54,14 +54,6 @@
               v-model.number="model[item.prop]"
               v-bind="item.attrs"
             ></InputNumber>
-            <!-- 树组件 -->
-            <TreeSelect
-              v-if="item.type === 'treeSelect'"
-              v-model="model[item.prop]"
-              :options="item?.options ?? []"
-              :placeholder="item?.placeholder ?? '请选择'"
-              v-bind="item.attrs"
-            />
             <!-- 富文本编辑器 -->
             <div id="editor" v-if="item.type === 'editor'"></div>
           </el-form-item>
