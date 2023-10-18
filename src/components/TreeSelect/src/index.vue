@@ -95,7 +95,8 @@
   const selectTree = ref(null);
   // 点击文本节点
   const handleNodeClick = (node) => {
-    if (node.children || props.isMultiple) return;
+    console.log(node, '点击节点');
+    // if (node.children || props.isMultiple) return;
     console.log(node, '选择文本', selectTreeRef.value);
     newValue.value = node.id;
     selectTree.value.blur();
@@ -121,7 +122,7 @@
   const clearHandler = () => {
     if (props.isMultiple) {
       selectTreeRef.value.setCheckedKeys([]);
-      newValue.value = currentValue.value = [];
+      newValue.value = [];
     } else {
       newValue.value = '';
     }

@@ -1,39 +1,29 @@
-<!-- Vue SFC -->
 <template>
   <div id="app">
     <div class="box">
       {{ value }}==
-      <TreeSelect v-model:treeValue="value" :options="options" placeholder="请选择" />
+      <TreeSelect v-model="value" :options="options" placeholder="请选择" isMultiple />
     </div>
     <br />
     <br />
-    <div class="box">
-      <treeselect v-model="value" :options="options" />
-    </div>
-    <br />
-    <br />
-    <el-input v-model="value" placeholder="请选择"></el-input>
   </div>
 </template>
 
 <script setup>
-  import Treeselect from 'vue3-treeselect';
-  // import the styles
-  import 'vue3-treeselect/dist/vue3-treeselect.css';
   const options = ref([
     {
       id: '1',
       label: 'a',
-      children: [
-        {
-          id: '2',
-          label: 'aa',
-        },
-        {
-          id: '3',
-          label: 'ab',
-        },
-      ],
+    },
+    {
+      id: '2',
+      label: 'aa',
+      parentId: '1',
+    },
+    {
+      id: '3',
+      label: 'ab',
+      parentId: '1',
     },
     {
       id: '4',
@@ -46,17 +36,20 @@
     {
       id: '6',
       label: 'd',
+      parentId: '5',
     },
     {
       id: '7',
       label: 'e',
+      parentId: '5',
     },
     {
       id: '8',
       label: 'f',
+      parentId: '5',
     },
   ]);
-  const value = ref(null);
+  const value = ref(['1']);
 </script>
 <style scoped lang="scss">
   .box {
