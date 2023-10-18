@@ -6,17 +6,32 @@ export const tableOptions = [
     fixed: 'left',
   },
   {
-    prop: 'username',
-    label: '用户名',
+    prop: 'title',
+    label: '部门名称',
     width: 180,
   },
   {
-    prop: 'parentName',
+    prop: 'parentTitle',
     label: '父节点',
   },
   {
     prop: 'tenantName',
     label: '所属商户',
+    width: 180,
+  },
+  {
+    prop: 'name',
+    label: '部门负责人',
+    width: 180,
+  },
+  {
+    prop: 'mobile',
+    label: '联系电话',
+    width: 180,
+  },
+  {
+    prop: 'email',
+    label: '电邮地址',
     width: 180,
   },
   {
@@ -80,7 +95,10 @@ export const formOption = (departmentList) => {
       label: '上级部门',
       prop: 'parentId',
       required: true,
-      option: departmentList,
+      data: departmentList,
+      attrs: {
+        'check-strictly': true,
+      },
     },
     {
       type: 'input',

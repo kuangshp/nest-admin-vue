@@ -21,6 +21,7 @@
             <component
               :is="`el-${item.type}`"
               :placeholder="item.placeholder ?? `请输入${item.label}`"
+              :data="item?.data"
               v-bind="item.attrs"
               v-model="model[item.prop]"
               v-if="!['upload', 'editor'].includes(item.type)"

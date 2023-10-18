@@ -112,7 +112,6 @@ axiosInstance.interceptors.response.use(
               refreshing = true;
               const { code } = await refreshToken();
               refreshing = false;
-              console.log(res, '刷新结构');
               if (code === 0) {
                 queue.forEach(({ config, resolve }) => {
                   resolve(axiosInstance(config));
