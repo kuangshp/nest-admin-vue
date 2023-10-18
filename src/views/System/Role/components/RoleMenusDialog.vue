@@ -8,7 +8,7 @@
       append-to-body
     >
       <div class="dialog-content">
-        <el-form :model="roleForm">
+        <el-form :model="roleForm" label-width="100">
           <el-form-item label="角色名称">
             <el-input v-model="roleForm.name" disabled></el-input>
           </el-form-item>

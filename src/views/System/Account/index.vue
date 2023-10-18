@@ -16,7 +16,7 @@
       <template #tableHeader>
         <el-button type="primary" @click="addNewHandler">新增</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
-        <el-button type="primary" @click="editRowHandler">分配角色</el-button>
+        <el-button type="primary" @click="dispatchRoleHandler">分配角色</el-button>
         <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
         <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
@@ -39,6 +39,8 @@
       :formData="formData"
       @getFormData="getFormData"
     ></FormDialog>
+    <!-- 分配角色弹框 -->
+    <AccountRoleDialog ref="accountRoleDialogRef" @updateTable="initTableData"></AccountRoleDialog>
   </div>
 </template>
 
@@ -48,6 +50,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus';
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import AccountRoleDialog from './components/AccountRoleDialog.vue';
 
   const route = useRoute();
   console.log(route.query.tenantId, '???');
@@ -192,6 +195,16 @@
       prop: 'sort',
     },
   ]);
+
+  // 分配角色
+  const accountRoleDialogRef = ref(null);
+  const dispatchRoleHandler = () => {
+    if (multipleSelection.value.length) {
+      accountRoleDialogRef.value.openDialog(multipleSelection.value[0]);
+    } else {
+      ElMessage.warning('请选择行操作');
+    }
+  };
   onMounted(() => {
     initTableData();
   });

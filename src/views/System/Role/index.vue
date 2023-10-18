@@ -17,7 +17,7 @@
         <el-button type="primary" @click="addNewHandler">新增</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
         <el-button type="primary" @click="dispatchMenusHandler">菜单权限</el-button>
-        <el-button type="primary" @click="editRowHandler">资源权限</el-button>
+        <!-- <el-button type="primary" @click="editRowHandler">资源权限</el-button> -->
         <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
         <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
