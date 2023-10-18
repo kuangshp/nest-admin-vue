@@ -56,6 +56,7 @@
             ></InputNumber>
             <!-- 树组件 -->
             <TreeSelect
+              v-if="item.type === 'treeSelect'"
               v-model="model[item.prop]"
               :options="item?.options ?? []"
               :placeholder="item?.placeholder ?? '请选择'"
