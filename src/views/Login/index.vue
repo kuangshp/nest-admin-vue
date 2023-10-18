@@ -134,7 +134,7 @@
       appStore.setGlobalRefreshToken(result[AUTH_REFRESH_TOKEN_NAME]);
       appStore.setGlobalUserInfo(result);
       // 获取菜单
-      appStore.getMenusApi();
+      await appStore.getMenusApi();
       // 全部关闭
       tagsViewStore.delAllView();
       router.push('/');
