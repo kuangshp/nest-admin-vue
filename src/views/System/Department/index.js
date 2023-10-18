@@ -88,7 +88,7 @@ export const queryFormOption = [
   },
 ];
 
-export const formOption = (departmentList) => {
+export const formOption = (departmentList, accountList) => {
   return [
     {
       type: 'treeSelect',
@@ -107,9 +107,15 @@ export const formOption = (departmentList) => {
       required: true,
     },
     {
-      type: 'input',
+      type: 'select',
       label: '负责人',
-      prop: 'name',
+      prop: 'accountId',
+      children: accountList,
+      attrs: {
+        style: {
+          width: '100%',
+        },
+      },
     },
     {
       type: 'input',

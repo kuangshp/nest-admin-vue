@@ -33,7 +33,7 @@
 
 <script setup>
   import { tableOptions, queryFormOption, formOption } from './index.js';
-  import { DepartmentService } from '@/services';
+  import { DepartmentService, AccountService } from '@/services';
   import { useRoute } from 'vue-router';
   import { getTreeList } from '@/utils';
 
@@ -85,7 +85,19 @@
     ];
     departmentList.value = getTreeList(list, 'id', 'parentId');
   };
+
+  const initAccount = async () => {
+    const { result } = await AccountService.getListApi();
+    accountList.value = result.map((item) => {
+      return {
+        type: 'option',
+        label: item.username,
+        value: item.id,
+      };
+    });
+  };
   // 新增
+  const accountList = ref([]);
   const departmentList = ref([
     {
       value: '1',
@@ -106,7 +118,7 @@
   ]);
   const title = ref('新增部门');
   const isVisibleDialog = ref(false);
-  const formOptionList = formOption(departmentList);
+  const formOptionList = formOption(departmentList, accountList);
   const formData = ref({
     parentId: '',
     title: '',
@@ -119,12 +131,14 @@
   const addNewHandler = async () => {
     title.value = '新增部门';
     await initDepartment();
+    await initAccount();
     isVisibleDialog.value = true;
   };
   const editRowHandler = async () => {
     if (multipleSelection.value.length) {
       title.value = '编辑部门';
       await initDepartment();
+      await initAccount();
       formData.value = {
         ...multipleSelection.value[0],
         parentId: multipleSelection.value[0].parentId ?? -1,
