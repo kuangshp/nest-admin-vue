@@ -16,7 +16,8 @@
       <template #tableHeader>
         <el-button type="primary" @click="addNewHandler">新增</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
-        <el-button type="primary" @click="editRowHandler">分配资源</el-button>
+        <el-button type="primary" @click="dispatchMenusHandler">菜单权限</el-button>
+        <el-button type="primary" @click="editRowHandler">资源权限</el-button>
         <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
         <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
@@ -39,6 +40,8 @@
       :formData="formData"
       @getFormData="getFormData"
     ></FormDialog>
+    <!-- 角色菜单权限 -->
+    <RoleMenusDialog ref="roleMenusDialogRef" @updateTable="initTableData"></RoleMenusDialog>
   </div>
 </template>
 
@@ -46,6 +49,7 @@
   import { RoleService } from '@/services';
   import { tableOptions, queryFormOption, formOption } from './index.js';
   import { ElMessage, ElMessageBox } from 'element-plus';
+  import RoleMenusDialog from './components/RoleMenusDialog.vue';
   import { ref } from 'vue';
   const tableData = ref([]);
   const pageTotal = ref(0);
@@ -152,7 +156,15 @@
       ElMessage.warning('请选择行操作');
     }
   };
-
+  // 分配角色菜单
+  const roleMenusDialogRef = ref(null);
+  const dispatchMenusHandler = () => {
+    if (multipleSelection.value.length) {
+      roleMenusDialogRef.value.openDialog(multipleSelection.value[0]);
+    } else {
+      ElMessage.warning('请选择行操作');
+    }
+  };
   onMounted(() => {
     initTableData();
   });
