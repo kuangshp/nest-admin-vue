@@ -70,6 +70,9 @@ router.beforeEach(async (to, from, next) => {
       const authMenusUrlList = appStore.authMenusList.map((item) => item.url);
       if (authMenusUrlList.includes(to.path) || whiteList.includes(to.name)) {
         NProgress.done();
+        console.log(to.path, '当前请求的地址');
+        // 根据当前地址去请求当前页面的按钮权限
+        await appStore.getBtnApi(to.path);
         next();
       } else {
         console.log('222');

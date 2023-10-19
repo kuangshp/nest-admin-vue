@@ -14,11 +14,17 @@
       @selection-change="handleSelectionChange"
     >
       <template #tableHeader>
-        <el-button type="primary" @click="addNewHandler">新增</el-button>
-        <el-button type="primary" @click="editRowHandler">编辑</el-button>
-        <el-button type="primary" @click="dispatchRoleHandler">分配角色</el-button>
-        <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
-        <el-button type="danger" @click="deleteRowHandler">删除</el-button>
+        <el-button type="primary" @click="addNewHandler" v-if="isShowBtn('新增')">新增</el-button>
+        <el-button type="primary" @click="editRowHandler" v-if="isShowBtn('编辑')">编辑</el-button>
+        <el-button type="primary" @click="dispatchRoleHandler" v-if="isShowBtn('分配角色')"
+          >分配角色</el-button
+        >
+        <el-button type="danger" @click="modifyStatusHandler" v-if="isShowBtn('批量状态')"
+          >批量状态</el-button
+        >
+        <el-button type="danger" @click="deleteRowHandler" v-if="isShowBtn('批量删除')"
+          >批量删除</el-button
+        >
       </template>
       <template #accountTotal="{ scope }">
         <el-tag type="success" style="cursor: pointer" @click="toLinkAccountDetail(scope.row)">{{
@@ -51,7 +57,7 @@
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
   import AccountRoleDialog from './components/AccountRoleDialog.vue';
-  import { getTreeList } from '@/utils';
+  import { getTreeList, isShowBtn } from '@/utils';
 
   const route = useRoute();
   console.log(route.query.tenantId, '???');

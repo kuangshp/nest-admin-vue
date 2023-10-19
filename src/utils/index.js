@@ -7,3 +7,4 @@ export * from './object';
 export * from './storage';
 export * from './decrypt';
 export * from './date';
+export * from './authBtn';

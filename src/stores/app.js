@@ -14,6 +14,7 @@ export const useAppStore = defineStore('app', {
       // TODO 实际开发替换模拟后端返回的菜单列表
       authMenusList: [],
       menusTreeList: [],
+      authBtnList: [], // 按钮权限列表
     };
   },
   getters: {},
@@ -36,11 +37,18 @@ export const useAppStore = defineStore('app', {
       this.authMenusList = result;
       this.menusTreeList = getTreeList(result, 'id', 'parentId');
     },
+    // 根据当前路由获取接口权限
+    async getBtnApi(url) {
+      console.log('getBtnApi', url);
+      const { result } = await MenusService.getAllBtnByMenusUrlApi(url);
+      this.authBtnList = result;
+    },
     clearGlobalToken() {
       this.globalToken = null;
       this.globalRefreshToken = null;
       this.authMenusList = [];
       this.menusTreeList = [];
+      this.authBtnList = [];
     },
     setGlobalUserInfo(userInfo) {
       this.globalUserInfo = userInfo;
