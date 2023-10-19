@@ -22,6 +22,7 @@
               :data="resourceData"
               show-checkbox
               node-key="id"
+              default-expand-all
               :props="{ class: customNodeClass }"
               @check="handleCheckChange"
             />
@@ -133,7 +134,7 @@
         ...item,
         id: item.id,
         label: item.title,
-        // isPenultimate: true,
+        isPenultimate: item.resourcesType == 1 ? true : false,
       };
     });
     const treeData = getTreeList(list, 'id', 'parentId');
@@ -167,6 +168,7 @@
     .el-tree-node.is-expanded.is-penultimate > .el-tree-node__children {
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
     }
   }
 </style>
