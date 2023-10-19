@@ -20,6 +20,11 @@ export const tableOptions = [
     width: 180,
   },
   {
+    prop: 'departmentTitle',
+    label: '部门',
+    width: 180,
+  },
+  {
     prop: 'status',
     label: '状态',
   },
