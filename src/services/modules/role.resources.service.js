@@ -7,7 +7,7 @@ export class RoleResourcesService extends BaseService {
   }
 
   // 根据角色id获取已经分配的资源
-  static async getResourcesByRoleIdApi(roleId) {
-    return BaseService.get(`/admin/roleResources/${roleId}`);
+  static async getResourcesByRoleIdApi(roleId, type) {
+    return BaseService.get(`/admin/roleResources/${roleId}?type=${type}`);
   }
 }

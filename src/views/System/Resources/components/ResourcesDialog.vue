@@ -35,23 +35,11 @@
             prop="parentId"
             v-if="isShowParentItem && formData.resourcesType != 0"
           >
-            <el-select
+            <el-tree-select
               v-model="formData.parentId"
-              placeholder="请选择"
+              :data="treeDataList"
+              check-strictly
               style="width: 100%"
-              v-if="formData.resourcesType == 1"
-            >
-              <el-option
-                v-for="(item, index) of treeDataList"
-                :key="index"
-                :label="item.label"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-            <TreeSelect
-              v-if="formData.resourcesType == 2"
-              :options="treeDataList"
-              v-model="formData.parentId"
             />
           </el-form-item>
           <el-form-item label="URL地址" prop="url">
@@ -93,7 +81,7 @@
 
 <script setup>
   import { ResourcesService } from '@/services';
-  import { formatDate } from '@/utils';
+  import { formatDate, getTreeList } from '@/utils';
   const dialogVisible = ref(false);
   const title = ref('创建资源');
   const treeDataList = ref([]);
@@ -164,12 +152,14 @@
     isShowParentItem.value = false;
     formData.value.parentId = null;
     const { result } = await ResourcesService.getCatalogApi({ catalogType: value });
-    treeDataList.value = result.map((item) => {
+    const list = result.map((item) => {
       return {
         ...item,
         label: item.title,
+        value: item.id,
       };
     });
+    treeDataList.value = getTreeList(list, 'id', 'parentId');
     isShowParentItem.value = true;
   };
   const formRef = ref(null);

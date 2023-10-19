@@ -34,8 +34,8 @@ export class ResourcesService extends BaseService {
     return BaseService.get('/admin/resources/catalog', queryOption);
   }
 
-  // 获取全部的菜单
-  static async getAllMenusApi() {
-    return BaseService.get('/admin/resources/menusList');
+  // 获取全部的资源 type=0表示菜单,1表示按钮
+  static async getAllResourcesApi(type) {
+    return BaseService.get(`/admin/resources/list?type=${type}`);
   }
 }

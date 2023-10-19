@@ -17,7 +17,7 @@
         <el-button type="primary" @click="addNewHandler">新增</el-button>
         <el-button type="primary" @click="editRowHandler">编辑</el-button>
         <el-button type="primary" @click="dispatchMenusHandler">菜单权限</el-button>
-        <!-- <el-button type="primary" @click="editRowHandler">资源权限</el-button> -->
+        <el-button type="primary" @click="dispatchApiRowHandler">数据权限</el-button>
         <el-button type="danger" @click="modifyStatusHandler">状态</el-button>
         <el-button type="danger" @click="deleteRowHandler">删除</el-button>
       </template>
@@ -42,6 +42,8 @@
     ></FormDialog>
     <!-- 角色菜单权限 -->
     <RoleMenusDialog ref="roleMenusDialogRef" @updateTable="initTableData"></RoleMenusDialog>
+    <!-- 数据权限 -->
+    <RoleApiDialog ref="roleApiDialogRef" @updateTable="initTableData"></RoleApiDialog>
   </div>
 </template>
 
@@ -50,6 +52,7 @@
   import { tableOptions, queryFormOption, formOption } from './index.js';
   import { ElMessage, ElMessageBox } from 'element-plus';
   import RoleMenusDialog from './components/RoleMenusDialog.vue';
+  import RoleApiDialog from './components/RoleApiDialog.vue';
   import { ref } from 'vue';
   const tableData = ref([]);
   const pageTotal = ref(0);
@@ -159,10 +162,20 @@
   // 分配角色菜单
   const roleMenusDialogRef = ref(null);
   const dispatchMenusHandler = () => {
-    if (multipleSelection.value.length) {
+    console.log(multipleSelection.value.length, '??');
+    if (multipleSelection.value.length == 1) {
       roleMenusDialogRef.value.openDialog(multipleSelection.value[0]);
     } else {
-      ElMessage.warning('请选择行操作');
+      ElMessage.warning('请选择一行操作');
+    }
+  };
+  // 分配数据权限
+  const roleApiDialogRef = ref(null);
+  const dispatchApiRowHandler = () => {
+    if (multipleSelection.value.length == 1) {
+      roleApiDialogRef.value.openDialog(multipleSelection.value[0]);
+    } else {
+      ElMessage.warning('请选择一行操作');
     }
   };
   onMounted(() => {

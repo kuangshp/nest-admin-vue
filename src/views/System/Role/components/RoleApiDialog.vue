@@ -7,7 +7,7 @@
       width="50%"
       append-to-body
     >
-      <div class="dialog-content">
+      <div class="dialog-content role-api">
         <el-form :model="roleForm" label-width="100">
           <el-form-item label="角色名称">
             <el-input v-model="roleForm.name" disabled></el-input>
@@ -16,13 +16,13 @@
             <el-input v-model="roleForm.tenantName" disabled></el-input>
           </el-form-item>
           <!-- 展示全部的菜单树 -->
-          <el-form-item label="菜单权限">
+          <el-form-item label="数据权限">
             <el-tree
               ref="treeRef"
               :data="resourceData"
-              :props="defaultProps"
               show-checkbox
               node-key="id"
+              :props="{ class: customNodeClass }"
               @check="handleCheckChange"
             />
           </el-form-item>
@@ -42,7 +42,7 @@
   import { RoleResourcesService, ResourcesService } from '@/services';
   import { getTreeList } from '@/utils';
   const dialogVisible = ref(false);
-  const title = ref('角色菜单');
+  const title = ref('数据权限');
   const loading = ref(false);
   const roleForm = ref({});
   const emits = defineEmits(['updateTable']);
@@ -64,7 +64,7 @@
     await RoleResourcesService.dispatchResourcesApi({
       roleId: roleForm.value.id,
       resourceList: allCheckedNodes.value,
-      type: 0,
+      type: 1, // 数据权限
     });
     cancelHandler();
     emits('updateTable');
@@ -127,22 +127,46 @@
   };
   // 获取全部的资源
   const initAllResourcesList = async () => {
-    const { result } = await ResourcesService.getAllResourcesApi(0);
-    const treeData = getTreeList(result, 'id', 'parentId');
+    const { result } = await ResourcesService.getAllResourcesApi(1);
+    const list = result.map((item) => {
+      return {
+        ...item,
+        id: item.id,
+        label: item.title,
+        // isPenultimate: true,
+      };
+    });
+    const treeData = getTreeList(list, 'id', 'parentId');
+    console.log(treeData, '?');
     resourceData.value = treeData;
   };
   // 根据角色id获取已经授权的资源
   const initRoleResourceList = async (roleId) => {
-    const { result } = await RoleResourcesService.getResourcesByRoleIdApi(roleId, 0);
+    const { result } = await RoleResourcesService.getResourcesByRoleIdApi(roleId, 1);
     findTreeCheckedNodeKey(
       result.map((item) => item.id),
       resourceData.value
     );
   };
+
+  const customNodeClass = (data, node) => {
+    if (data.isPenultimate) {
+      return 'is-penultimate';
+    }
+    return null;
+  };
+
   // 对外暴露出去的
   defineExpose({
     openDialog,
   });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+  .role-api {
+    .el-tree-node.is-expanded.is-penultimate > .el-tree-node__children {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+</style>

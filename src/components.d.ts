@@ -42,6 +42,7 @@ declare module 'vue' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElTree: typeof import('element-plus/es')['ElTree']
+    ElTreeSelect: typeof import('element-plus/es')['ElTreeSelect']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Hamburger: typeof import('./layout/components/AppHeader/components/Hamburger/index.vue')['default']
     Index1: typeof import('./components/TreeSelect/src/index1.vue')['default']

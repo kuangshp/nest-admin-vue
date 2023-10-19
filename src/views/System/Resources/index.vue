@@ -14,7 +14,7 @@
       :expand-row-keys="expandRowKeys"
       @expand-change="expandChangeHandler"
     >
-      <el-table-column prop="title" label="名称" />
+      <el-table-column prop="title" label="名称" width="120" />
       <el-table-column prop="resourcesType" label="类型" align="center" width="100">
         <template #default="scope">
           <el-tag type="info" v-if="scope.row.resourcesType == 0">模块</el-tag>
@@ -23,7 +23,8 @@
           <el-tag type="info" v-else>未知</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="url" label="URL地址" />
+      <el-table-column prop="url" label="URL地址" width="170" />
+      <el-table-column prop="method" label="请求方式" width="100" />
       <el-table-column prop="sort" label="排序" align="center" width="100" />
       <el-table-column prop="status" label="状态" align="center" width="100">
         <template #default="scope">
@@ -31,7 +32,7 @@
           <el-tag type="danger" v-else>禁用</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" />
+      <el-table-column prop="description" label="描述" width="140" />
       <el-table-column prop="createdAt" label="创建时间" width="180" align="center">
         <template #default="scope">
           <span>{{ formatDateStr(scope.row.createdAt, true) }}</span>
